@@ -18,12 +18,12 @@ export default {
         this.username = getUserResponseBody.username;
         this.userId = getUserResponseBody.id;
 
+        this.isLoggedInUser = this.userId == new AuthService().getUserId();
+
         let getProjectsResponse = await fetch("/api/projects?user_id=" + this.userId);
         let getProjectsResponseBody = await getProjectsResponse.json();
 
         this.projects = getProjectsResponseBody.projects;
-
-        this.isLoggedInUser = this.userId == new AuthService().getUserId();
     }
 }
 </script>

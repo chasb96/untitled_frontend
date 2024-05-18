@@ -19,27 +19,9 @@ export default {
         this.id = this.$route.params.id;
         this.name = getProjectResponseBody.name;
         this.owner = getProjectResponseBody.user_id;
+        this.files = getProjectResponseBody.files;
         
         this.isOwnedByUser = this.owner == new AuthService().getUserId();
-
-        let getProjectFilesResponse = await fetch("/api/projects/" + this.id + "/files");
-        let getProjectFilesResponseBody = await getProjectFilesResponse.json();
-
-        let getFilesRequest = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + new AuthService().getToken(),
-            },
-            body: JSON.stringify({
-                ids: getProjectFilesResponseBody.file_ids
-            })
-        };
-
-        let getFilesResponse = await fetch('/api/files', getFilesRequest);
-        let getFilesResponseBody = await getFilesResponse.json();
-
-        this.files = getFilesResponseBody.files;
     }
 }
 </script>

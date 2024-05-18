@@ -39,7 +39,13 @@ export default {
                     'Authorization': 'Bearer ' + new AuthService().getToken(),
                 },
                 body: JSON.stringify({
-                    file_ids: uploadResponseBody.ids
+                    files: Object.entries(uploadResponseBody.ids)
+                        .map(([path, file_id]) => { 
+                            return {
+                                path: path,
+                                file_id: file_id
+                            }
+                        })
                 })
             };
 
@@ -47,7 +53,7 @@ export default {
 
             switch (response.status) {
                 case 500: this.$router.push('/internal_server_error'); break;
-                case 200: this.$router.push('/projects/' + this.$route.params.id);
+                case 204: this.$router.push('/projects/' + this.$route.params.id);
             };
         },
         setName(event, index) {
