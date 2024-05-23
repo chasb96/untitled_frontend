@@ -33,23 +33,25 @@ export default {
             let uploadResponseBody = await uploadResponse.json();
 
             let associateRequest = {
-                method: 'POST',
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + new AuthService().getToken(),
                 },
                 body: JSON.stringify({
-                    files: Object.entries(uploadResponseBody.ids)
-                        .map(([path, file_id]) => { 
-                            return {
-                                path: path,
-                                file_id: file_id
-                            }
-                        })
+                    af: {
+                        f: Object.entries(uploadResponseBody.ids)
+                            .map(([path, file_id]) => { 
+                                return {
+                                    p: path,
+                                    fid: file_id
+                                }
+                            })
+                    }
                 })
             };
 
-            let response = await fetch('/api/projects/' + this.$route.params.id + '/files', associateRequest);
+            let response = await fetch('/api/projects/' + this.$route.params.id, associateRequest);
 
             switch (response.status) {
                 case 500: this.$router.push('/internal_server_error'); break;

@@ -22,6 +22,46 @@ export default {
         this.files = getProjectResponseBody.files;
         
         this.isOwnedByUser = this.owner == new AuthService().getUserId();
+    },
+    methods: {
+        async remove(index) {
+            let request = {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + new AuthService().getToken(),
+                },
+                body: JSON.stringify({
+                    rm: {
+                        p: [this.files[index].name]
+                    }
+                })
+            };
+    
+            let response = await fetch('/api/projects/' + this.id, request);
+    
+            if (response.status == 204) {
+                this.files.splice(index, 1);
+            }
+        },
+        rename(index, to) {
+            let request = {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + new AuthService().getToken(),
+                },
+                body: JSON.stringify({
+                    mv: {
+                        p: {
+                            [this.files[index].name]: to,
+                        }
+                    }
+                })
+            };
+
+            fetch('/api/projects/' + this.id, request);
+        }
     }
 }
 </script>
@@ -45,10 +85,19 @@ export default {
         <div class="container-fluid border-top border-dark">
             <ul class="list-group mt-3 mb-3">
                 <li v-for="(file, i) in files" class="list-group-item border-dark d-flex p-0">
-                    <div class="flex-grow-1 p-2">
-                        <a class="text-light text-decoration-none" v-bind:href="'/api/files/' + file.id">{{ file.name }}</a>
+                    <div class="flex-grow-1">
+                        <input 
+                            v-if="isOwnedByUser"
+                            type="text" 
+                            class="form-control bg-black border-dark text-primary rounded-0 border-0"
+                            v-bind:value="file.name" 
+                            v-on:change.prevent="rename(i, $event.target.value)"/>
+                        <a v-else class="text-light text-decoration-none m-2" v-bind:href="'/api/files/' + file.id">{{ file.name }}</a>
                     </div>
 
+                    <div>
+                        <button class="btn btn-sm btn-danger rounded-0 m-1 me-0" @click.prevent="remove(i)" v-if="isOwnedByUser">Remove</button>
+                    </div>
                     <a v-bind:href="'/api/files/' + file.id">
                         <button class="btn btn-sm btn-primary rounded-0 rounded-end-1 m-1">Download</button>
                     </a>

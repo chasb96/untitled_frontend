@@ -17,13 +17,9 @@ export default {
 
         this.username = getUserResponseBody.username;
         this.userId = getUserResponseBody.id;
+        this.projects = getUserResponseBody.projects;
 
         this.isLoggedInUser = this.userId == new AuthService().getUserId();
-
-        let getProjectsResponse = await fetch("/api/projects?user_id=" + this.userId);
-        let getProjectsResponseBody = await getProjectsResponse.json();
-
-        this.projects = getProjectsResponseBody.projects;
     }
 }
 </script>
@@ -52,9 +48,9 @@ export default {
                 <div class="container-fluid border-top border-dark">
                     <div class="row">
                         <div v-for="(project, i) in projects" class="col-md-4">
-                            <a :href="'/projects/' + project.id" class="card mt-3">
+                            <a :href="'/projects/' + project.project_id" class="card mt-3">
                                 <div class="card-body">
-                                    <h5 class="text-white mt-2">{{ project.name }}</h5>
+                                    <h5 class="text-white mt-2">{{ project.project_name }}</h5>
                                 </div>
                             </a>
                         </div>
