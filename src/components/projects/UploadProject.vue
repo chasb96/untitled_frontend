@@ -104,7 +104,7 @@ export default {
     </div>
 </template>
 
-<style>
+<style scoped>
     #dropZone {
         min-height: 34rem;
     }
