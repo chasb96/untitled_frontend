@@ -7,7 +7,6 @@ import SignUp from '../components/SignUp.vue'
 import Login from '../components/Login.vue'
 import CreateProject from '../components/projects/CreateProject.vue'
 import Project from '../components/projects/Project.vue'
-import UploadProject from '../components/projects/UploadProject.vue'
 import Home from '../components/Home.vue'
 
 Vue.use(Router)
@@ -20,7 +19,6 @@ export default new Router({
     { path: '/@:username', component: User },
     { path: '/projects/create', component: CreateProject },
     { path: '/projects/:id', component: Project },
-    { path: '/projects/:id/upload', component: UploadProject },
     { path: '/internal_server_error', component: InternalServerError },
     { path: '/', component: Home },
     { path: '*', component: NotFound }
