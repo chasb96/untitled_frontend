@@ -20,7 +20,14 @@ export default {
         sortFiles() {
             this.files.sort((a, b) => a.n.toUpperCase().localeCompare(b.n.toUpperCase()));
         },
+        async getProject() {
+            let getProjectResponse = await fetch("/web/projects/" + this.project_id);
+            
+            return await getProjectResponse.json();
+        },
         async remove(index) {
+            let project = await this.getProject();
+
             let request = {
                 method: 'PUT',
                 headers: {
@@ -29,18 +36,21 @@ export default {
                 },
                 body: JSON.stringify({
                     rm: {
+                        pe: project.e,
                         p: [this.files[index].n]
                     }
                 })
             };
     
-            let response = await fetch('/api/projects/' + this.project_id, request);
+            let response = await fetch('/web/projects/' + this.project_id, request);
     
             if (response.status == 204) {
                 this.files.splice(index, 1);
             }
         },
-        rename(index, to) {
+        async rename(index, to) {
+            let project = await this.getProject();
+
             let request = {
                 method: 'PUT',
                 headers: {
@@ -49,6 +59,7 @@ export default {
                 },
                 body: JSON.stringify({
                     mv: {
+                        pe: project.e,
                         p: {
                             [this.files[index].n]: to,
                         }
@@ -56,20 +67,22 @@ export default {
                 })
             };
 
-            fetch('/web/projects/' + this.project_id, request);
+            await fetch('/web/projects/' + this.project_id, request);
 
             this.sortFiles()
         },
         async addFile(e) { 
-            if (!this.isOwnedByUser) {
+            if (!this.isOwnedByUser || e.dataTransfer.files.length != 1) {
                 return;
             }
             
+            let file = e.dataTransfer.files[0];
+            
             let form = new FormData();
 
-            for (let file in [...e.dataTransfer.files]) {
-                form.append(file.name, file);
-            }
+            form.append(file.name, file);
+
+            let project = await this.getProject();
 
             let request = {
                 method: 'POST',
@@ -82,6 +95,12 @@ export default {
             let uploadResponse = await fetch('/api/files', request);
             let uploadResponseBody = await uploadResponse.json();
 
+            if (uploadResponse.status != 202) {
+                this.$router.push('/internal_server_error');
+
+                return;
+            }
+
             let associateRequest = {
                 method: 'PUT',
                 headers: {
@@ -89,19 +108,17 @@ export default {
                     'Authorization': 'Bearer ' + new AuthService().getToken(),
                 },
                 body: JSON.stringify({
-                    af: {
-                        f: Object.entries(uploadResponseBody.ids)
-                            .map(([path, file_id]) => { 
-                                return {
-                                    p: path,
-                                    fid: file_id
-                                }
-                            })
+                    a: {
+                        pe: project.e,
+                        f: [{
+                            p: file.name,
+                            f: uploadResponseBody.i
+                        }]
                     }
                 })
             };
 
-            let response = await fetch('/web/projects/' + this.$route.params.id, associateRequest);
+            let response = await fetch('/web/projects/' + this.project_id, associateRequest);
 
             if (response.status == 500) {
                 this.$router.push('/internal_server_error');
@@ -109,10 +126,10 @@ export default {
                 return;
             }
 
-            let getProjectResponse = await fetch("/web/projects/" + this.$route.params.id);
-            let getProjectResponseBody = await getProjectResponse.json();
-
-            this.files = getProjectResponseBody.f;
+            this.files.push({
+                i: uploadResponseBody.i,
+                n: file.name
+            });
 
             this.sortFiles()
         }
@@ -155,14 +172,14 @@ export default {
                             v-bind:value="file.n" 
                             v-on:change.prevent="rename(i, $event.target.value)"/>
                         <div v-else class="pt-2">
-                            <a class="text-light text-decoration-none m-2" v-bind:href="'/api/files/' + file.id">{{ file.n }}</a>
+                            <a class="text-light text-decoration-none m-2" v-bind:href="'/api/files/' + file.i">{{ file.n }}</a>
                         </div>
                     </div>
     
                     <div v-if="isOwnedByUser">
                         <button class="btn btn-sm btn-danger rounded-0 m-1 me-0" @click.prevent="remove(i)">Remove</button>
                     </div>
-                    <a v-bind:href="'/api/files/' + file.id">
+                    <a v-bind:href="'/api/files/' + file.i">
                         <button class="btn btn-sm btn-primary rounded-0 rounded-end-1 m-1">Download</button>
                     </a>
                 </li>
