@@ -12,12 +12,12 @@ export default {
         }
     },
     async mounted () {
-        let getUserResponse = await fetch("/api/users/@" + this.$route.params.username);
+        let getUserResponse = await fetch("/web/users/@" + this.$route.params.username);
         let getUserResponseBody = await getUserResponse.json();
 
-        this.username = getUserResponseBody.username;
-        this.userId = getUserResponseBody.id;
-        this.projects = getUserResponseBody.projects;
+        this.username = getUserResponseBody.u;
+        this.userId = getUserResponseBody.i;
+        this.projects = getUserResponseBody.p;
 
         this.isLoggedInUser = this.userId == new AuthService().getUserId();
     }
@@ -45,12 +45,12 @@ export default {
                     </div>
                 </div>
 
-                <div class="container-fluid border-top border-dark">
+                <div class="container-fluid border-top border-dark mb-2">
                     <div class="row">
-                        <div v-for="(project, i) in projects" class="col-md-4">
-                            <a :href="'/projects/' + project.project_id" class="card mt-3">
+                        <div v-for="(project, _) in projects" class="col-md-4">
+                            <a :href="'/projects/' + project.i" class="card mt-3">
                                 <div class="card-body">
-                                    <h5 class="text-white mt-2">{{ project.project_name }}</h5>
+                                    <h5 class="text-white mt-2">{{ project.n }}</h5>
                                 </div>
                             </a>
                         </div>

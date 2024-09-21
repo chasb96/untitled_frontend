@@ -3,27 +3,19 @@ import AuthService from '../../../auth';
 
 export default {
     name: 'ProjectTags',
-    props: ['isOwnedByUser'],
+    props: ['tags', 'isOwnedByUser'],
     data() {
         return {
-            id: '',
-            tags: [],
+            project_id: '',
+            tags: this.tags,
             isOwnedByUser: this.isOwnedByUser,
             inputVisible: false,
         }
     },
     mounted() {
-        this.id = this.$route.params.id;
-
-        this.getTags();
+        this.project_id = this.$route.params.project_id;
     },
     methods: {
-        async getTags() {
-            let response = await fetch('/api/projects/' + this.id + '/tags');
-            let responseBody = await response.json();
-
-            this.tags = responseBody.t;
-        },
         async add(value) {
             this.tags.push(value);
             this.inputVisible = false;
@@ -39,7 +31,7 @@ export default {
                 })
             };
 
-            await fetch('/api/projects/' + this.id + '/tags', request);
+            await fetch('/api/projects/' + this.project_id + '/tags', request);
         },
         async remove(tag) {
             let index = this.tags.indexOf(tag);
@@ -53,7 +45,7 @@ export default {
                 },
             };
 
-            await fetch('/api/projects/' + this.id + '/tags/' + tag, request);
+            await fetch('/api/projects/' + this.project_id + '/tags/' + tag, request);
         }
     }
 }
@@ -62,7 +54,7 @@ export default {
 <template>
     <div>
         <div v-for="tag in tags" class="badge bg-primary text-black me-1 mb-2 p-0">
-            <span class="p-1">{{ tag }}</span>
+            <div class="px-2 p-1 d-inline">{{ tag }}</div>
             <button v-if="isOwnedByUser" class="btn btn-danger btn-sm p-0 px-1 rounded-2" @click.prevent="remove(tag)">&times;</button>
         </div>
         <button v-if="isOwnedByUser" class="btn badge bg-secondary text-black me-1 mb-2" @click.prevent="inputVisible = true">&plus; Add Tag</button>

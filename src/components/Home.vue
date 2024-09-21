@@ -4,19 +4,15 @@ export default {
     data() {
         return {
             popularProjects: [],
-            topUsers: [],
+            popularUsers: [],
         }
     },
     async mounted() {
-        let projectsResponse = await fetch('/api/projects');
-        let projectsResponseBody = await projectsResponse.json();
+        let popularResponse = await fetch('/web/popular');
+        let popularResponseBody = await popularResponse.json();
 
-        this.popularProjects = projectsResponseBody.p;
-
-        let usersResponse = await fetch('/api/users');
-        let usersResponseBody = await usersResponse.json();
-
-        this.topUsers = usersResponseBody.u;
+        this.popularProjects = popularResponseBody.p;
+        this.popularUsers = popularResponseBody.u;
     }
 }
 </script>
@@ -31,8 +27,8 @@ export default {
                     </div>
                     <ul class="card-body bg-black list-group p-0">
                         <a v-for="project in popularProjects" 
-                            v-bind:href="'/projects/' + project.id" 
-                            class="list-group-item bg-black border-0 text-dark-emphasis text-decoration-none h5 pt-3 pb-3 mb-0"
+                            v-bind:href="'/projects/' + project.i" 
+                            class="list-group-item bg-black border-0 text-gray-light text-decoration-none h5 pt-3 pb-3 mb-0"
                         >
                             {{ project.n }}
                         </a>
@@ -46,9 +42,9 @@ export default {
                         <h4 class="mb-0 fst-italic">Top Users</h4>
                     </div>
                     <ul class="card-body bg-black list-group p-0">
-                        <a v-for="user in topUsers" 
+                        <a v-for="user in popularUsers" 
                             v-bind:href="'/@' + user.u" 
-                            class="list-group-item bg-black border-0 text-dark-emphasis text-decoration-none h5 pt-3 pb-3 mb-0"
+                            class="list-group-item bg-black border-0 text-gray-light text-decoration-none h5 pt-3 pb-3 mb-0"
                         >
                             {{ user.u }}
                         </a>

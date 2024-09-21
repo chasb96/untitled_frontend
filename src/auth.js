@@ -15,7 +15,7 @@ export default class AuthService {
     }
 
     getUserId() {
-        return parseInt(localStorage.getItem("user_id"));
+        return localStorage.getItem("user_id");
     }
 
     getUsername() {

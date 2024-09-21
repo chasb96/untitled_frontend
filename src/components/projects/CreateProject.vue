@@ -1,6 +1,6 @@
 <template>
     <div class="container-md bg-black mt-4 border border-dark rounded" style="max-width: 34rem;">
-        <h2 class="mt-3 ms-3 text-white">Create Project</h2>
+        <h3 class="mt-3 ms-3 text-white">Create Project</h3>
         <hr class="border-dark opacity-100" />
 
         <form>
@@ -44,17 +44,17 @@ export default {
                     'Authorization': 'Bearer ' + this.authService.getToken(),
                 },
                 body: JSON.stringify({
-                    name: this.name,
+                    n: this.name,
                 })
             };
 
-            let response = await fetch('/api/projects', request);
+            let response = await fetch('/web/projects', request);
 
             switch (response.status) {
                 case 500: this.$router.push('/internal_server_error'); break;
                 case 201: {
                     let responseBody = await response.json();
-                    let projectId = responseBody.id;
+                    let projectId = responseBody.i;
 
                     this.$router.push('/projects/' + projectId); 
                 }

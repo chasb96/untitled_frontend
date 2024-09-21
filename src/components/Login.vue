@@ -59,19 +59,19 @@ export default {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    username: this.username,
-                    password: this.password,
+                    u: this.username,
+                    p: this.password,
                 })
             };
 
-            let response = await fetch('/api/login', request);
+            let response = await fetch('/web/login', request);
 
             switch (response.status) {
                 case 401: this.show_invalid_credentials = true; break;
                 case 500: this.$router.push('/internal_server_error'); break;
                 case 200: {
                     let response_body = await response.json();
-                    let token = response_body.token;
+                    let token = response_body.t;
 
                     this.auth_service.setToken(token);
 
