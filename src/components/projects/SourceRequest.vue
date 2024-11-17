@@ -19,7 +19,7 @@ export default {
         this.project_id = this.$route.params.project_id;
         this.source_request_id = this.$route.params.source_request_id;
 
-        let getSourceRequest = await fetch("/api/projects/" + this.project_id + "/source_requests/" + this.source_request_id);
+        let getSourceRequest = await fetch("/web/projects/" + this.project_id + "/source_requests/" + this.source_request_id);
         let getSourceRequestBody = await getSourceRequest.json();
 
         if (getSourceRequestBody.c != null) {
@@ -33,12 +33,12 @@ export default {
             this.title = getSourceRequestBody.n.t;
         }
 
-        let getSourceRequestComments = await fetch("/api/projects/" + this.project_id + "/source_requests/" + this.source_request_id + "/comments");
+        let getSourceRequestComments = await fetch("/web/projects/" + this.project_id + "/source_requests/" + this.source_request_id + "/comments");
         let getSourceRequestCommentsBody = await getSourceRequestComments.json();
 
         this.comments = getSourceRequestCommentsBody.c;
 
-        let getSourceRequestDiff = await fetch("/api/projects/" + this.project_id + "/source_requests/" + this.source_request_id + "/diff");
+        let getSourceRequestDiff = await fetch("/web/projects/" + this.project_id + "/source_requests/" + this.source_request_id + "/diff");
         let getSourceRequestDiffBody = await getSourceRequestDiff.json();
 
         this.diff = getSourceRequestDiffBody;
@@ -56,11 +56,11 @@ export default {
                 }),
             };
 
-            await fetch("/api/projects/" + this.project_id + "/source_requests/" + this.source_request_id + "/comments", request);
+            await fetch("/web/projects/" + this.project_id + "/source_requests/" + this.source_request_id + "/comments", request);
 
             this.comment = '';
 
-            let getSourceRequestComments = await fetch("/api/projects/" + this.project_id + "/source_requests/" + this.source_request_id + "/comments");
+            let getSourceRequestComments = await fetch("/web/projects/" + this.project_id + "/source_requests/" + this.source_request_id + "/comments");
             let getSourceRequestCommentsBody = await getSourceRequestComments.json();
 
             this.comments = getSourceRequestCommentsBody.c;

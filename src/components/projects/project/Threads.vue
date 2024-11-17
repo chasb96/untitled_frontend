@@ -13,7 +13,7 @@ export default {
     async mounted() {
         this.project_id = this.$route.params.project_id;
 
-        let getThreadsResponse = await fetch("/api/projects/" + this.project_id + "/threads");
+        let getThreadsResponse = await fetch("/web/projects/" + this.project_id + "/threads");
         let getThreadsResponseBody = await getThreadsResponse.json();
 
         this.threads = getThreadsResponseBody.t;
@@ -35,10 +35,14 @@ export default {
             </a>
         </div>
 
-        <div class="container-fluid px-0">
+        <div class="container-fluid px-0 border-top border-dark">
+            <div v-if="threads.length == 0" class="d-flex flex-column justify-content-center mt-2 mb-2">
+                <span>No conversations here, press 'New Thread' to start one!</span>
+            </div>
+
             <ul class="list-group rounded-0">
                 <li v-for="thread in threads" class="list-group-item text-white border-0 border-top border-dark bg-black p-0">
-                    <a v-bind:href="'/projects/' + project_id + '/threads/' + thread.id" class="text-decoration-none text-white h5">
+                    <a v-bind:href="'/projects/' + project_id + '/threads/' + thread.i" class="text-decoration-none text-white h5">
                         <div class="p-3">
                             {{ thread.t }}
                         </div>

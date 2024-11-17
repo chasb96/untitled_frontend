@@ -8,6 +8,7 @@ import Login from '../components/Login.vue'
 import CreateProject from '../components/projects/CreateProject.vue'
 import Project from '../components/projects/Project.vue'
 import Thread from '../components/projects/Thread.vue'
+import NewThread from '../components/projects/NewThread.vue'
 import SourceRequest from '../components/projects/SourceRequest.vue'
 import NewSourceRequest from '../components/projects/NewSourceRequest.vue'
 import Home from '../components/Home.vue'
@@ -23,6 +24,7 @@ export default new Router({
     { path: '/projects/create', component: CreateProject },
     { path: '/projects/:project_id', component: Project, props: { page: 'files' } },
     { path: '/projects/:project_id/threads', component: Project, props: { page: 'threads' } },
+    { path: '/projects/:project_id/threads/create', component: NewThread },
     { path: '/projects/:project_id/threads/:thread_id', component: Thread },
     { path: '/projects/:project_id/contribute', component: Project, props: { page: 'contribute' } },
     { path: '/projects/:project_id/contribute/create', component: NewSourceRequest },

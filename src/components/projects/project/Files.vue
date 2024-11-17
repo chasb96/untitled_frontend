@@ -82,8 +82,6 @@ export default {
 
             form.append(file.name, file);
 
-            let project = await this.getProject();
-
             let request = {
                 method: 'POST',
                 headers: {
@@ -100,6 +98,8 @@ export default {
 
                 return;
             }
+
+            let project = await this.getProject();
 
             let associateRequest = {
                 method: 'PUT',

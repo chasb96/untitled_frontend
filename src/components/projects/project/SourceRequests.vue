@@ -13,7 +13,7 @@ export default {
     async mounted() {
         this.project_id = this.$route.params.project_id;
 
-        let getSourceRequestsResponse = await fetch("/api/projects/" + this.project_id + "/source_requests");
+        let getSourceRequestsResponse = await fetch("/web/projects/" + this.project_id + "/source_requests");
         let getSourceRequestsResponseBody = await getSourceRequestsResponse.json();
 
         this.source_requests = getSourceRequestsResponseBody.sr
@@ -59,7 +59,7 @@ export default {
             </a>
         </div>
 
-        <div class="container-fluid px-0">
+        <div class="container-fluid px-0 border-top border-dark">
             <ul class="list-group rounded-0">
                 <li v-for="source_request in source_requests" class="list-group-item text-white border-0 border-top border-dark bg-black p-0">
                     <a v-bind:href="'/projects/' + project_id + '/contribute/' + source_request.id" class="text-decoration-none text-white h5">

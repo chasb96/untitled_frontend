@@ -16,6 +16,7 @@ export default {
             name: '',
             owner: 0,
             files: [],
+            tags: [],
             isOwnedByUser: false,
         }
     },
@@ -35,6 +36,7 @@ export default {
         this.name = getProjectResponseBody.n;
         this.owner = getProjectResponseBody.o.i;
         this.files = getProjectResponseBody.f;
+        this.tags = getProjectResponseBody.t;
 
         this.isOwnedByUser = this.owner == new AuthService().getUserId();
     }
@@ -45,7 +47,7 @@ export default {
     <div class="container bg-black mt-4 border border-dark rounded">
         <project-header v-bind:name="name" v-bind:page="page"></project-header>
 
-        <project-tags v-bind:isOwnedByUser="isOwnedByUser"></project-tags>
+        <project-tags v-bind:isOwnedByUser="isOwnedByUser" v-bind:tags="tags"></project-tags>
 
         <project-files v-if="page == 'files'" v-bind:files="files" v-bind:isOwnedByUser="isOwnedByUser"></project-files>
         <project-threads v-else-if="page == 'threads'"></project-threads>

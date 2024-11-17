@@ -17,7 +17,7 @@ export default {
         this.project_id = this.$route.params.project_id;
         this.thread_id = this.$route.params.thread_id;
 
-        let getThreadResponse = await fetch("/api/projects/" + this.project_id + "/threads/" + this.thread_id);
+        let getThreadResponse = await fetch("/web/projects/" + this.project_id + "/threads/" + this.thread_id);
         let getThreadResponseBody = await getThreadResponse.json();
 
         this.title = getThreadResponseBody.t;
@@ -36,11 +36,11 @@ export default {
                 }),
             };
 
-            await fetch("/api/projects/" + this.project_id + "/threads/" + this.thread_id + "/comments", request);
+            await fetch("/web/projects/" + this.project_id + "/threads/" + this.thread_id + "/comments", request);
 
             this.comment = '';
 
-            let getThreadResponse = await fetch("/api/projects/" + this.project_id + "/threads/" + this.thread_id);
+            let getThreadResponse = await fetch("/web/projects/" + this.project_id + "/threads/" + this.thread_id);
             let getThreadResponseBody = await getThreadResponse.json();
 
             this.title = getThreadResponseBody.t;

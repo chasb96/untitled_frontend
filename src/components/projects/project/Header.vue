@@ -27,7 +27,7 @@ export default {
         <div class="flex-fill"></div>
 
         <div v-if="isAuthenticated">
-            <a v-if="page == 'threads'" href="">
+            <a v-if="page == 'threads'" v-bind:href="'/projects/' + project_id + '/threads/create'">
                 <button class="btn btn-primary mt-2">New Thread</button>
             </a>
             <a v-if="page == 'contribute'" v-bind:href="'/projects/' + project_id + '/contribute/create'">

@@ -16,6 +16,13 @@ export default {
         this.project_id = this.$route.params.project_id;
     },
     methods: {
+        showInput() {
+            this.inputVisible = true;
+
+            this.$nextTick(() => {
+                this.$refs.input.focus()
+            })
+        },
         async add(value) {
             this.tags.push(value);
             this.inputVisible = false;
@@ -31,7 +38,7 @@ export default {
                 })
             };
 
-            await fetch('/api/projects/' + this.project_id + '/tags', request);
+            await fetch('/web/projects/' + this.project_id + '/tags', request);
         },
         async remove(tag) {
             let index = this.tags.indexOf(tag);
@@ -45,7 +52,7 @@ export default {
                 },
             };
 
-            await fetch('/api/projects/' + this.project_id + '/tags/' + tag, request);
+            await fetch('/web/projects/' + this.project_id + '/tags/' + tag, request);
         }
     }
 }
@@ -57,9 +64,10 @@ export default {
             <div class="px-2 p-1 d-inline">{{ tag }}</div>
             <button v-if="isOwnedByUser" class="btn btn-danger btn-sm p-0 px-1 rounded-2" @click.prevent="remove(tag)">&times;</button>
         </div>
-        <button v-if="isOwnedByUser" class="btn badge bg-secondary text-black me-1 mb-2" @click.prevent="inputVisible = true">&plus; Add Tag</button>
+        <button v-if="isOwnedByUser" class="btn badge bg-secondary text-black me-1 mb-2" @click.prevent="showInput()">&plus; Add Tag</button>
         <input 
             v-if="inputVisible" 
+            ref="input"
             type="text" 
             class="form-control bg-black border-primary text-primary mt-2 mb-2" 
             v-on:keyup.enter="add($event.target.value)" 

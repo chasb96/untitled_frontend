@@ -20,9 +20,7 @@ async fn main() {
         .nest_service(
             "/", 
             ServeDir::new("./app/dist")
-                .not_found_service(
-                    ServeFile::new("./app/dist/index.html")
-                )
+                .fallback(ServeFile::new("./app/dist/index.html"))
         )
         .layer(LogLayer::new());
 
